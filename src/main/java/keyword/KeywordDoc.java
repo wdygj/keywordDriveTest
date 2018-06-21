@@ -29,16 +29,16 @@ public class KeywordDoc
 
     public void setSpecificData(Keyword key)
     {
-        proConditions = Common.numberSplit(key.getProCondition(),Data.NUMBERSPLIT_REGEX);
-        proConditionCodes = Common.numberSplit(key.getProConditionCode(),Data.NUMBERSPLIT_REGEX);
-        operationKeys = Common.numberSplit(key.getOperationKey(),Data.NUMBERSPLIT_REGEX);
-        operationKeyCodes = Common.numberSplit(key.getOperationKeyCode(),Data.NUMBERSPLIT_REGEX);
-        pageObjects = Common.numberSplit(key.getPageObject(),Data.NUMBERSPLIT_REGEX);
-        pageObjectCodes = Common.numberSplit(key.getPageObjectCode(),Data.NUMBERSPLIT_REGEX);
-        expecteds = Common.numberSplit(key.getExpected(),Data.NUMBERSPLIT_REGEX);
-        expectedCodes = Common.numberSplit(key.getExpectedCode(),Data.NUMBERSPLIT_REGEX);
-        commons = Common.numberSplit(key.getCommon(),Data.NUMBERSPLIT_REGEX);
-        commonCodes = Common.numberSplit(key.getCommonCode(),Data.NUMBERSPLIT_REGEX);
+        proConditions = Common.numberSplit(key.getProCondition(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        proConditionCodes = Common.numberSplit(key.getProConditionCode(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        operationKeys = Common.numberSplit(key.getOperationKey(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        operationKeyCodes = Common.numberSplit(key.getOperationKeyCode(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        pageObjects = Common.numberSplit(key.getPageObject(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        pageObjectCodes = Common.numberSplit(key.getPageObjectCode(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        expecteds = Common.numberSplit(key.getExpected(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        expectedCodes = Common.numberSplit(key.getExpectedCode(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        commons = Common.numberSplit(key.getCommon(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
+        commonCodes = Common.numberSplit(key.getCommonCode(),Data.Key_STARTPOSITION_REGEX,Data.Key_NUMBERSPLIT_REGEX);
     }
 
     public void initial(String url) throws Exception

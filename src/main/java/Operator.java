@@ -1,9 +1,9 @@
 import common.Check;
+import common.Common;
 import data.Data;
 import keyword.Keyword;
 import keyword.KeywordDoc;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import page.Pages;
@@ -47,7 +47,7 @@ public class Operator
                     keywordDocument.setCurrentRow(currentRow + 1);
                 }
                 Testcase testcase = testcases.get(i);
-                if (testcase.isTest() && testcase.getTestTool().equals("自动化"))
+                if (testcase.isTest() && testcase.getTestTool().equals("自动化")) //如果纳入测试不为“是”或测试工具栏不为自动化，那么将跳过这条测试
                 {
                     testcaseDocument.setSpecificData(testcase);
                     String[] pros = testcaseDocument.getProconditions();
@@ -88,8 +88,9 @@ public class Operator
             String find = keywordDocument.matchCode(str[i].substring(2, str[i].length()), type);
             Check.isNotNull(find, "Can't find methodCode");
             String[] finds = find.split(Data.SENTENCE_REGEX);
+
             String[] data = new String[2];
-            String testData = testcaseDocument.getSpecific_testData(index);
+            String[] testData = testcaseDocument.getSpecific_testData();
             for (int j = 0; j < opCodes.length; j++)
             {
                 if (type == 0)
@@ -98,13 +99,16 @@ public class Operator
                 } else
                 {
                     data[0] = finds[j];
-                    data[1] = testData;
+                    data[1] = testData[index];//这里报错的话说明本身表里没有写数据但是方法确要求两个参数，检查表和方法看问题在哪
                 }
                 Method method = keywordDocument.matchMethod(Pages.class, opCodes[j]);
                 //执行方法
                 int parameterCount = method.getParameterCount();
                 index = (type == 0&&parameterCount==2) ? index : index + 1;
                 Thread.sleep(3000);
+                try{invokeMehtod(pages,method,parameterCount,data);}
+                catch (NoSuchElementException|InvocationTargetException e)
+                {
                 List<WebElement> iframes = driver.findElements(By.xpath("//iframe"));
                 int iframe_Size = iframes.size();
                 int sig = -1;       //用于跳出for循环
@@ -112,7 +116,7 @@ public class Operator
                 for (k = 0; k < iframe_Size; k++)   //执行方法并遍历文档的iframe一个一个找
                 {
                     try{invokeMehtod(pages,method,parameterCount,data);}
-                    catch (NoSuchElementException|InvocationTargetException e)
+                    catch (NoSuchElementException|InvocationTargetException a)
                     {
                         driver.switchTo().defaultContent();
                         driver.switchTo().frame(iframes.get(k));++sig;
@@ -122,6 +126,7 @@ public class Operator
                 Check.isNotEquals(k,iframe_Size,"can't find such Element");
             }
         }
+    }
     }
 
     private boolean checkExpected(String[] specific_excpected)
@@ -136,17 +141,17 @@ public class Operator
         pages.setup();
     }
 
-    private boolean isSetKeywordDoc(List<Testcase> keywords, int index)
+    private boolean isSetKeywordDoc(List<Testcase> keywords, int index) throws Exception
     {
         boolean result = false;
         Testcase keyword_Now = keywords.get(index);
         if (index != 0)
         {
             String proCondition_Now = keyword_Now.getProCondition();
-            proCondition_Now.substring(0, proCondition_Now.indexOf("界面"));
+            String page_Now=getPositionFromString(proCondition_Now);
             String proCondition_provious = keywords.get(index - 1).getProCondition();
-            proCondition_provious.substring(0, proCondition_Now.indexOf("界面"));
-            if (!proCondition_Now.equals(proCondition_provious))
+            String page_provious = getPositionFromString(proCondition_provious);
+            if (!page_Now.equals(page_provious))
             {
                 result = true;
             }
@@ -155,6 +160,18 @@ public class Operator
             result = true;
         }
         return result;
+    }
+    private String getPositionFromString(String text) throws Exception
+    {
+        String[] strings = Common.numberSplit(text, Data.TestCase_STARTPOSITION_REGEX,Data.TestCase_NUMBERSPLIT_REGEX);
+        String page = "";
+        for (int i = 0; i < strings.length; i++)
+        {
+            int indexOf = strings[i].indexOf("界面");
+            if (indexOf>-1){page=strings[i];break;}
+        }
+        if (page.equals("")){throw new Exception("Can't find '界面'");}
+        return  page;
     }
     private void invokeMehtod(Pages pages,Method method,int paramCount,String[] data) throws Exception
     {

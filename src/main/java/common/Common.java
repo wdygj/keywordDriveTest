@@ -152,13 +152,13 @@ public class Common
         return rowCount;
     }
     //对于用数字序号例如：1.a 2.b 3.c这样的数据进行分割，返回数据实体，例如之前的{a,b,c}数组
-    public static String[] numberSplit(String text, String regex)
+    public static String[] numberSplit(String text, int startPosition,String regex)
     {
-        Pattern p = Pattern.compile(Data.NUMBERSPLIT_REGEX);
+        Pattern p = Pattern.compile(regex);
         boolean hasNumber = p.matcher(text).find();
-        if (text.length()>2&&hasNumber)
+        if (text.length()>startPosition&&hasNumber)
         {
-            text = text.substring(2, text.length());
+            text = text.substring(startPosition, text.length());
             text = text.replace("\n", "");
         }
         String[] a = text.split(regex);

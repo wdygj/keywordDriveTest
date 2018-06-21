@@ -9,7 +9,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,10 +70,10 @@ public class TestcaseDoc
     }
     public void setSpecificData(Testcase Tcase)
     {
-        proconditions = Common.numberSplit(Tcase.getProCondition(),Data.NUMBERSPLIT_REGEX);
-        proccesions = Common.numberSplit(Tcase.getProcession(),Data.NUMBERSPLIT_REGEX);
-        testDatas = Common.numberSplit(Tcase.getTestData(),Data.NUMBERSPLIT_REGEX);
-        excpecteds = Common.numberSplit(Tcase.getExpected(),Data.NUMBERSPLIT_REGEX);
+        proconditions = Common.numberSplit(Tcase.getProCondition(),Data.TestCase_STARTPOSITION_REGEX,Data.TestCase_NUMBERSPLIT_REGEX);
+        proccesions = Common.numberSplit(Tcase.getProcession(),Data.TestCase_STARTPOSITION_REGEX,Data.TestCase_NUMBERSPLIT_REGEX);
+        testDatas = Common.numberSplit(Tcase.getTestData(),Data.TestCase_STARTPOSITION_REGEX,Data.TestCase_NUMBERSPLIT_REGEX);
+        excpecteds = Common.numberSplit(Tcase.getExpected(),Data.TestCase_STARTPOSITION_REGEX,Data.TestCase_NUMBERSPLIT_REGEX);
 
     }
     //geterAndSeter
@@ -105,18 +104,10 @@ public class TestcaseDoc
     {
         this.proccesions = proccesions;
     }
-    //特殊化取用具体的数据
-    public String getSpecific_testData(int index)
-    {
-        int length = testDatas.length;
-        if (index<length)
-        {
-        return testDatas[index];
-        }else
-            {
-                throw new IndexOutOfBoundsException("Index for get testData if out of Bounds!,Please Check again");
-            }
 
+    public String[] getSpecific_testData()
+    {
+        return testDatas;
     }
 
     public void setTestDatas(String[] testDatas)
@@ -152,22 +143,5 @@ public class TestcaseDoc
     public void setTestcases(List<Testcase> testcases)
     {
         this.testcases = testcases;
-    }
-
-    public String getproConditionWeb(String text)
-    {
-        String result = null;
-        String[] split = Common.numberSplit(text, "\\d\\.");
-        for (int i = 0; i < split.length; i++)
-        {
-            int index = split[i].indexOf("界面");
-            if (index >= 0)
-            {
-                result = split[i].substring(2, index+2);
-            }
-        }
-        if (result == null)
-        {throw new NullPointerException("can't not find 界面");}
-        return result;
     }
 }
