@@ -88,7 +88,6 @@ public class Operator
             String find = keywordDocument.matchCode(str[i].substring(2, str[i].length()), type);
             Check.isNotNull(find, "Can't find methodCode");
             String[] finds = find.split(Data.SENTENCE_REGEX);
-
             String[] data = new String[2];
             String[] testData = testcaseDocument.getSpecific_testData();
             for (int j = 0; j < opCodes.length; j++)
@@ -105,7 +104,6 @@ public class Operator
                 //执行方法
                 int parameterCount = method.getParameterCount();
                 index = (type == 0&&parameterCount==2) ? index : index + 1;
-                Thread.sleep(3000);
                 try{invokeMehtod(pages,method,parameterCount,data);}
                 catch (NoSuchElementException|InvocationTargetException e)
                 {
