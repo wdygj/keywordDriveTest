@@ -79,6 +79,7 @@ public class Operator
 
     private void runSentence(String[] str, int type) throws Exception
     {
+        Thread.sleep(2000);
         int index = 0;
         for (int i = 0; i < str.length; i++)
         {

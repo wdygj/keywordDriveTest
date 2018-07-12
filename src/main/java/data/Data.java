@@ -16,10 +16,9 @@ public class Data
     public static final int ROWHEAD_INDEX = 10;
     public static final String SHEETHEAD_STRING = "测试大纲";
     public static final String SHEETEND_STRING = "流程测试用例";
-
     //启动浏览器驱动配置
     public static final String WEBDRIVER_TYPE = "chrome";
-    public static final String DRIVER_URL = "F:\\driver\\chromedriver.exe";
+    public static final String DRIVER_URL = "target/classes/chromedriver.exe";
     //航站人员账号密码
     public static final String USERNAME_1 = "laosiji005";
     public static final String password_1 = "a6461889";
